@@ -1,22 +1,16 @@
 # swrv-ssr-bug
 
-> My stylish Nuxt.js project
+## Problem
 
-## Build Setup
+Having multiple instances of `useSWRV` does not rehydrate correctly.
 
 ```bash
-# install dependencies
-$ yarn install
-
-# serve with hot reload at localhost:3000
-$ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
-
-# generate static project
-$ yarn generate
+export default {
+  setup() {
+    const { data: data1 } = useSWRV('post1', () => fetchPostById(1));
+    const { data: data2 } = useSWRV('post2', () => fetchPostById(2));
+    return { data1, data2 }
+  }
+}
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
