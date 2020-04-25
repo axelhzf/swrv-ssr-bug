@@ -1,72 +1,33 @@
 <template>
   <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        swrv-ssr-bug
-      </h1>
-      <h2 class="subtitle">
-        My stylish Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+    <div v-if="data1">
+      {{ data1 }}
+    </div>
+    <div v-if="data2">
+      {{ data2 }}
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import useSWRV from 'swrv';
 
 export default {
-  components: {
-    Logo
+  setup() {
+    const { data: data1 } = useSWRV('post1', () => fetchPostById(1));
+    const { data: data2 } = useSWRV('post2', () => fetchPostById(2));
+    return { data1, data2 }
   }
 }
+
+async function fetchPostById(id) {
+  await wait(1000);
+  return `Post ${id}`;
+}
+
+function wait(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
